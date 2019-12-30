@@ -18,7 +18,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.abcode.socialbooks.domain.Livro;
 import com.abcode.socialbooks.services.LivroService;
-import com.abcode.socialbooks.services.exceptions.LivroNaoEncontradoException;
 
 @RestController
 @RequestMapping("/livros")
@@ -42,34 +41,21 @@ public class LivroResources {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> buscar(@PathVariable("id") Long id) {
-		Livro obj = null;
-		try {
-			obj = livroService.buscar(id);
-		} catch (LivroNaoEncontradoException e) {
-			return ResponseEntity.notFound().build();
-		}
+	public ResponseEntity<?> buscar(@PathVariable Long id) {
+		Livro obj = livroService.buscar(id);
+
 		return ResponseEntity.status(HttpStatus.OK).body(obj);
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deletar(@PathVariable Long id) {
-		try {
-			livroService.deletar(id);
-		} catch (LivroNaoEncontradoException e) {
-			return ResponseEntity.notFound().build();
-		}
+		livroService.deletar(id);
 		return ResponseEntity.noContent().build();
 	}
 
 	@PutMapping("/{id}")
 	public ResponseEntity<Void> atualizar(@RequestBody Livro livro, @PathVariable("id") Long id) {
-		livro.setId(id);
-		try {
-			livroService.atualizar(livro);
-		} catch (LivroNaoEncontradoException e) {
-			return ResponseEntity.notFound().build();
-		}
+		livroService.atualizar(livro);
 
 		return ResponseEntity.noContent().build();
 	}

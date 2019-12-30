@@ -1,6 +1,7 @@
 package com.abcode.socialbooks.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,11 +22,11 @@ public class LivroService {
 	}
 	
 	public Livro buscar(Long id) {
-		Livro obj = livroRepository.getOne(id);
-		if(obj == null) {
+		Optional<Livro> obj = livroRepository.findById(id);
+		if(!obj.isPresent()) {
 			throw new LivroNaoEncontradoException("Livro nao encontrado");
 		}
-		return obj;
+		return obj.get();
 	}
 	
 	public Livro salvar(Livro livro) {

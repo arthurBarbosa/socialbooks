@@ -1,9 +1,9 @@
 package com.abcode.socialbooks.domain;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.Generated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,26 +14,41 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
-public class Livro {
-	
+public class Livro implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@JsonInclude(value = Include.NON_NULL)
+
+	private String nome;
+
+	@JsonInclude(Include.NON_NULL)
 	private Date publicacao;
-	
-	@JsonInclude(value = Include.NON_NULL)
+
+	@JsonInclude(Include.NON_NULL)
 	private String editora;
-	
-	@JsonInclude(value = Include.NON_NULL)
+
+	@JsonInclude(Include.NON_NULL)
 	private String resumo;
-	
+
+	@JsonInclude(Include.NON_NULL)
 	@Transient
-	@JsonInclude(value = Include.NON_NULL)
 	private List<Comentario> comentarios;
-	
+
+	@JsonInclude(Include.NON_NULL)
 	private String autor;
+
+	public Livro() {
+	}
+
+	public Livro(String nome) {
+		this.nome = nome;
+	}
 
 	public Long getId() {
 		return id;
@@ -41,6 +56,14 @@ public class Livro {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
 	}
 
 	public Date getPublicacao() {
@@ -74,7 +97,5 @@ public class Livro {
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
-	
-	
 
 }
