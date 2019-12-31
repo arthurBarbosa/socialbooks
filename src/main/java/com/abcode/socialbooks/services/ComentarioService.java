@@ -1,6 +1,7 @@
 package com.abcode.socialbooks.services;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,12 @@ public class ComentarioService {
 		comentario.setLivro(obj);
 		comentario.setData(new Date());
 		return comentarioRepository.save(comentario);
+	}
+
+	public List<Comentario> listarComentarios(Long livroId) {
+		Livro obj = livroService.buscar(livroId);
+		
+		return obj.getComentarios();
 	}
 
 }
