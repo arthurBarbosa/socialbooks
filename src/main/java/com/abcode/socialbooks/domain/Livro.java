@@ -101,6 +101,14 @@ public class Livro implements Serializable {
 		this.comentarios = comentarios;
 	}
 
+	public String getResumo() {
+		return resumo;
+	}
+
+	public void setResumo(String resumo) {
+		this.resumo = resumo;
+	}
+
 	public Autor getAutor() {
 		return autor;
 	}
