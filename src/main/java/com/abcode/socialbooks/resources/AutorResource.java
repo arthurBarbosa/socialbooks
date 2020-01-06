@@ -34,15 +34,14 @@ public class AutorResource {
 	@PostMapping
 	public ResponseEntity<Void> salvar(@RequestBody Autor autor) {
 		autor = autorService.salvar(autor);
-		
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
-				.path("/{id}").buildAndExpand(autor.getId()).toUri();
-		
+
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(autor.getId()).toUri();
+
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Autor>> buscar(@PathVariable("id") Long id){
+	public ResponseEntity<Optional<Autor>> buscar(@PathVariable("id") Long id) {
 		Optional<Autor> autor = autorService.buscar(id);
 		return ResponseEntity.status(HttpStatus.OK).body(autor);
 	}

@@ -2,6 +2,7 @@ package com.abcode.socialbooks.handler;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -25,7 +26,7 @@ public class ResourceExceptionHandler {
 		erro.setTimestamp(System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
 	}
-	
+
 	@ExceptionHandler(AutorExistenteException.class)
 	public ResponseEntity<DetalheErro> handleLivroNaoEncontradoException(AutorExistenteException e,
 			HttpServletRequest request) {
@@ -36,7 +37,7 @@ public class ResourceExceptionHandler {
 		erro.setTimestamp(System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(erro);
 	}
-	
+
 	@ExceptionHandler(AutorNaoEncontradoException.class)
 	public ResponseEntity<DetalheErro> handleLivroNaoEncontradoException(AutorNaoEncontradoException e,
 			HttpServletRequest request) {
@@ -48,5 +49,16 @@ public class ResourceExceptionHandler {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
 	}
 
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<DetalheErro> handleDataIntegrityViolationException(DataIntegrityViolationException e,
+			HttpServletRequest request) {
+		DetalheErro erro = new DetalheErro();
+		erro.setStatus(400l);
+		erro.setTitulo("requisicao invalida");
+		erro.setMensagemDesenvolvedor("http://erros.socialbooks.com/400");
+		erro.setTimestamp(System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+
+	}
 
 }
