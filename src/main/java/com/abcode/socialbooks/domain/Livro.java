@@ -1,6 +1,5 @@
 package com.abcode.socialbooks.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -20,9 +19,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
-public class Livro implements Serializable {
+public class Livro  {
 
-	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,8 +3,10 @@ package com.abcode.socialbooks.resources;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -45,6 +47,9 @@ public class AutorResource {
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Autor>> buscar(@PathVariable("id") Long id) {
 		Optional<Autor> autor = autorService.buscar(id);
-		return ResponseEntity.status(HttpStatus.OK).body(autor);
+		
+		CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS);
+		
+		return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(autor);
 	}
 }

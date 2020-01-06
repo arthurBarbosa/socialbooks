@@ -2,10 +2,14 @@ package com.abcode.socialbooks.resources;
 
 import java.net.URI;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +53,9 @@ public class LivroResources {
 	public ResponseEntity<?> buscar(@PathVariable Long id) {
 		Livro obj = livroService.buscar(id);
 
-		return ResponseEntity.status(HttpStatus.OK).body(obj);
+		CacheControl cacheControl = CacheControl.maxAge(20, TimeUnit.SECONDS);
+
+		return ResponseEntity.status(HttpStatus.OK).cacheControl(cacheControl).body(obj);
 	}
 
 	@DeleteMapping("/{id}")
@@ -66,19 +72,24 @@ public class LivroResources {
 	}
 
 	@PostMapping("/{id}/comentarios")
-	public ResponseEntity<Void> adicionarComentario(@PathVariable("id") Long livroId, 
+	public ResponseEntity<Void> adicionarComentario(@PathVariable("id") Long livroId,
 			@RequestBody Comentario comentario) {
+
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		comentario.setUsuario(auth.getName());
+		
 		comentarioService.salvar(livroId, comentario);
 
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().build().toUri();
 
 		return ResponseEntity.created(uri).build();
 	}
-	
+
 	@GetMapping("/{id}/comentarios")
-	public ResponseEntity<List<Comentario>> listarComentarios(@PathVariable("id") Long livroId){
+	public ResponseEntity<List<Comentario>> listarComentarios(@PathVariable("id") Long livroId) {
 		List<Comentario> comentarios = comentarioService.listarComentarios(livroId);
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body(comentarios);
 	}
 

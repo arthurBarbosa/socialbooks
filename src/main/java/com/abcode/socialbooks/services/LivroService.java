@@ -16,40 +16,39 @@ public class LivroService {
 
 	@Autowired
 	private LivroRepository livroRepository;
-	
-	public List<Livro> listar(){
+
+	public List<Livro> listar() {
 		return livroRepository.findAll();
 	}
-	
+
 	public Livro buscar(Long id) {
 		Optional<Livro> obj = livroRepository.findById(id);
-		if(!obj.isPresent()) {
+		if (!obj.isPresent()) {
 			throw new LivroNaoEncontradoException("Livro nao encontrado");
 		}
 		return obj.get();
 	}
-	
+
 	public Livro salvar(Livro livro) {
 		livro.setId(null);
 		return livroRepository.save(livro);
 	}
-	
+
 	public void deletar(Long id) {
 		try {
 			livroRepository.deleteById(id);
-		}catch(EmptyResultDataAccessException e) {
+		} catch (EmptyResultDataAccessException e) {
 			throw new LivroNaoEncontradoException("Livro nao encontrado.");
 		}
 	}
-	
-	
+
 	public void atualizar(Livro livro) {
 		verificarExistencia(livro);
 		livroRepository.save(livro);
 	}
-	
+
 	private void verificarExistencia(Livro livro) {
 		buscar(livro.getId());
 	}
-	
+
 }
